@@ -155,7 +155,15 @@ public class Frame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == buttonClean) {
-            textArea.setText("");
+
+            if ( textArea.getLineCount() == 1) {
+                JOptionPane.showMessageDialog(null, "Table is already empty!", "Information", JOptionPane.PLAIN_MESSAGE);
+            } else {
+                int answer = JOptionPane.showConfirmDialog(null, "Are you sure to clean all table?", "Cleaning", JOptionPane.YES_NO_OPTION);
+                if (answer == JOptionPane.YES_OPTION) {
+                    textArea.setText("");
+                }
+            }
         }
 
         if (e.getSource() == buttonSaveFile) {
@@ -163,7 +171,6 @@ public class Frame extends JFrame implements ActionListener {
             if (response == JFileChooser.APPROVE_OPTION) {
                 File fileSave = new File(fileChooser.getSelectedFile().getAbsolutePath());
                 saveWordsInFile(fileSave);
-
             }
         }
     }
@@ -221,9 +228,27 @@ public class Frame extends JFrame implements ActionListener {
 
         listOfEntries = new ArrayList<>(treeMap.entrySet());
         listOfEntries.sort(Map.Entry.comparingByValue(Comparator.reverseOrder())); //Sorting words
+
+        showMessageDialog(listOfEntries.size());
+
         for (var entry : listOfEntries) {
             textArea.append(entry.getValue() + " - " + entry.getKey() + "\n"); //placing words to Frame
         }
+    }
+
+    private void showMessageDialog(int size) {
+        Thread newThread = new Thread() {
+            public void run() {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Searching is finished! \n" + "Found " + size + " unique words",
+                        "Searching",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+        };
+        newThread.start();
+
+
     }
 }
 
