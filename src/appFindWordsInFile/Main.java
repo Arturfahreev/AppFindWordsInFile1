@@ -1,4 +1,7 @@
 package appFindWordsInFile;
+/**
+ * Program finds all unique words in txt file and count them
+ */
 
 import javax.swing.*;
 
